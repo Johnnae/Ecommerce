@@ -6,7 +6,19 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // get all products
 router.get('/', (req, res) => {
   // find all products
-  // be sure to include its associated Category and Tag data
+  // be sure to include its associated Category and Tag data 
+  try {
+    const products =  Product.findAll({
+      include: [
+        { model: Category },
+        { model: Tag, through: ProductTag },
+      ],
+    });
+    res.json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 // get one product
